@@ -52,7 +52,6 @@ jobs:
       shell: pwsh # For Linux, use bash
       run: |
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        npm install react-router-dom
         npm install
         npm run build --if-present
         npm run test --if-present
