@@ -4,6 +4,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Test_Page from "./pages/test_Page";
 import Test_Page2 from "./pages/test_Pages2";
 import Test_Page3 from './pages/test_pages3';
+import Login_Page from './pages/Login_Page';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/test-page" element={<Test_Page />} />
         <Route path="/test-page2" element={<Test_Page2 />} />
         <Route path="/test-page3" element={<Test_Page3 />} />
+        <Route path="/login" element={<Login_Page />} />
       </Routes>
     </div>
   );

@@ -1,4 +1,5 @@
 
+
 function Test_Page() {
   const handleClick = () => {
     alert('Кнопка 1');
@@ -6,7 +7,7 @@ function Test_Page() {
 
   return (
     <div>
-      <h1>Я страница 1</h1>
+
       <button
         type="button"
         className="btn btn-primary"
