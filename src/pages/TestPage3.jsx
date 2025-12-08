@@ -1,5 +1,3 @@
-
-
 function Test_Page3() {
   const handleClick = () => {
     alert('Кнопка 3');
