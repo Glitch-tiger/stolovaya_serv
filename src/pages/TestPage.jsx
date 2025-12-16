@@ -1,3 +1,5 @@
+import UsersPage from "./UsersPage";
+
 function Test_Page() {
   const handleClick = () => {
     alert('Кнопка 1');
@@ -6,6 +8,7 @@ function Test_Page() {
   return (
     <div>
       <h1>Я страница 1</h1>
+      <UsersPage></UsersPage>
       <button
         type="button"
         className="btn btn-primary"
