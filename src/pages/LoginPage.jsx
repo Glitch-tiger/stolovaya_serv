@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import pb from '../pocketbase';
 
 function Login_Page() {
   const navigate = useNavigate();
