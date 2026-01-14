@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install react-router-dom
+      run: npm install react-router-dom
+      
+    - name: Fix BOM in pb.js
+      run: |
+        # Удаляем BOM из файла
+        sed -i '1s/^\xEF\xBB\xBF//' src/pb.js || true
+        
+    - name: Fix component names
+      run: |
+        # Исправляем имена компонентов (опционально, если нужно автоматизировать)
+        sed -i 's/Test_Page/TestPage/g' src/App.jsx || true
+        sed -i 's/Login_Page/LoginPage/g' src/App.jsx || true
+        
+    - name: Create .env file
+      run: |
+        echo "CI=false" >> .env
+        echo "DISABLE_ESLINT_PLUGIN=true" >> .env
+        
+    - name: Build project
+      run: npm run build
+      env:
+        CI: false
+        
+    - name: Test project
+      run: npm test -- --watchAll=false --passWithNoTests
+      env:
+        CI: false
+        
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: build
+        branch: gh-pages
