@@ -1,0 +1,26 @@
+name: Deploy Azure Function
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        # Используйте Service Principal для аутентификации
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Deploy to Azure Functions
+      uses: Azure/functions-action@v1
+      with:
+        app-name: 'your-function-app-name'
+        slot-name: 'production'
+        package: '.' # или путь к вашей папке с функцией
