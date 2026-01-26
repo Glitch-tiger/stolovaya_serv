@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: stolovaya-serv
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: |
+      # Запускаем React статику
+      npx serve -s build -l 3000 &
+      # Запускаем PocketBase
+      cd pocketbase && ./pocketbase serve --http=0.0.0.0:8090
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+    plans:
+      - name: free
