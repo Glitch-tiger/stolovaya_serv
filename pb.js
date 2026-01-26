@@ -1,11 +1,25 @@
 ﻿import PocketBase from "pocketbase";
 
-// На Render оба сервиса на одном домене, но разных портах
-// PocketBase на порту 8090, React на 3000
-const pbUrl = window.location.hostname === 'localhost' 
-  ? "http://localhost:8090"
-  : `${window.location.origin.replace(/:\d+/, '')}:8090`;
+// В Codespaces используем динамический URL
+const getPbUrl = () => {
+  if (typeof window === 'undefined') return '';
+  
+  const { hostname, protocol } = window.location;
+  
+  // GitHub Codespaces
+  if (hostname.includes('github.dev') || hostname.includes('preview.app.github.dev')) {
+    return `${protocol}//${hostname.replace('3000', '8090')}`;
+  }
+  
+  // Локально
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:8090';
+  }
+  
+  // GitHub Pages (НЕ БУДЕТ РАБОТАТЬ!)
+  return '';
+};
 
-const pb = new PocketBase(pbUrl);
+const pb = new PocketBase(getPbUrl());
 export default pb;
 
