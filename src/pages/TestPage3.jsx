@@ -1,4 +1,4 @@
-function Test_Page3() {
+function TestPage3() {
   const handleClick = () => {
     alert('Кнопка 3');
   };
@@ -26,4 +26,4 @@ function Test_Page3() {
   );
 }
 
-export default Test_Page3;
+export default TestPage3;

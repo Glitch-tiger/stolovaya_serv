@@ -1,6 +1,6 @@
 import UsersPage from "./UsersPage";
 
-function Test_Page() {
+function TestPage() {
   const handleClick = () => {
     alert('Кнопка 1');
   };
@@ -20,4 +20,4 @@ function Test_Page() {
   );
 }
 
-export default Test_Page;
+export default TestPage;
