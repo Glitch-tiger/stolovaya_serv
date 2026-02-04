@@ -7,14 +7,14 @@ export const sqlApi = {
     const params = new URLSearchParams();
     if (search) params.append('search', search);
     if (className && className !== 'all') params.append('class', className);
-    
+
     const url = `${API_URL}/users${params.toString() ? '?' + params.toString() : ''}`;
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`Ошибка API: ${response.status}`);
     }
-    
+
     return await response.json();
   },
 
@@ -25,39 +25,39 @@ export const sqlApi = {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(userData)
+      body: JSON.stringify(userData),
     });
-    
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || 'Ошибка добавления пользователя');
     }
-    
+
     return await response.json();
   },
 
   // Удалить пользователя
   deleteUser: async (id) => {
     const response = await fetch(`${API_URL}/users/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     });
-    
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || 'Ошибка удаления пользователя');
     }
-    
+
     return await response.json();
   },
 
   // Получить статистику
   getStats: async () => {
     const response = await fetch(`${API_URL}/users/stats`);
-    
+
     if (!response.ok) {
       throw new Error(`Ошибка API: ${response.status}`);
     }
-    
+
     return await response.json();
-  }
+  },
 };

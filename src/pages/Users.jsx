@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import pb from '../pb';  // Импорт PocketBase из src/pb.js
+import pb from '../pb'; // Импорт PocketBase из src/pb.js
 
 function Users() {
   // Состояния
@@ -11,19 +11,29 @@ function Users() {
     first_name: '',
     last_name: '',
     class: '5а',
-    student_id: ''
+    student_id: '',
   });
   const [error, setError] = useState('');
   const [isConnected, setIsConnected] = useState(false);
 
   // Опции для классов
   const classOptions = [
-    '5а', '5б', '5в', '5г',
-    '6а', '6б', '6в',
-    '7а', '7б', '7в',
-    '8а', '8б',
-    '9а', '9б',
-    '10', '11'
+    '5а',
+    '5б',
+    '5в',
+    '5г',
+    '6а',
+    '6б',
+    '6в',
+    '7а',
+    '7б',
+    '7в',
+    '8а',
+    '8б',
+    '9а',
+    '9б',
+    '10',
+    '11',
   ];
 
   // Проверка подключения к PocketBase
@@ -44,33 +54,57 @@ function Users() {
     try {
       setLoading(true);
       setError('');
-      
+
       // Проверяем подключение
       const connected = await checkConnection();
       if (!connected) {
         throw new Error('PocketBase сервер не доступен!');
       }
-      
+
       // Получаем данные из PocketBase
       const records = await pb.collection('users').getFullList({
         sort: 'class,last_name',
-        $autoCancel: false
+        $autoCancel: false,
       });
-      
+
       setUsers(records);
-      
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
-      setError(`Не могу подключиться к PocketBase! Проверьте:\n1. PocketBase запущен (порт 8090)\n2. База данных "users" существует\n\nОшибка: ${error.message}`);
-      
+      setError(
+        `Не могу подключиться к PocketBase! Проверьте:\n1. PocketBase запущен (порт 8090)\n2. База данных "users" существует\n\nОшибка: ${error.message}`
+      );
+
       // Тестовые данные для демонстрации
       setUsers([
-        { id: 'test1', student_id: '101', first_name: 'Иван', last_name: 'Петров', class: '5а' },
-        { id: 'test2', student_id: '102', first_name: 'Мария', last_name: 'Сидорова', class: '5а' },
-        { id: 'test3', student_id: '103', first_name: 'Алексей', last_name: 'Иванов', class: '6б' },
-        { id: 'test4', student_id: '104', first_name: 'Елена', last_name: 'Кузнецова', class: '6б' },
+        {
+          id: 'test1',
+          student_id: '101',
+          first_name: 'Иван',
+          last_name: 'Петров',
+          class: '5а',
+        },
+        {
+          id: 'test2',
+          student_id: '102',
+          first_name: 'Мария',
+          last_name: 'Сидорова',
+          class: '5а',
+        },
+        {
+          id: 'test3',
+          student_id: '103',
+          first_name: 'Алексей',
+          last_name: 'Иванов',
+          class: '6б',
+        },
+        {
+          id: 'test4',
+          student_id: '104',
+          first_name: 'Елена',
+          last_name: 'Кузнецова',
+          class: '6б',
+        },
       ]);
-      
     } finally {
       setLoading(false);
     }
@@ -85,24 +119,24 @@ function Users() {
   const addUser = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       // Валидация
       if (!newUser.first_name.trim()) {
         alert('Введите имя ученика!');
         return;
       }
-      
+
       if (!newUser.last_name.trim()) {
         alert('Введите фамилию ученика!');
         return;
       }
-      
+
       if (!newUser.student_id.trim()) {
         alert('Введите ID номер ученика!');
         return;
       }
-      
+
       const studentId = parseInt(newUser.student_id);
       if (isNaN(studentId)) {
         alert('ID должен быть числом! Например: 123');
@@ -120,25 +154,24 @@ function Users() {
         student_id: newUser.student_id,
         first_name: newUser.first_name,
         last_name: newUser.last_name,
-        class: newUser.class
+        class: newUser.class,
       });
-      
+
       alert(`✅ Ученик ${record.first_name} ${record.last_name} добавлен в PocketBase!`);
-      
+
       // Сброс формы
       setNewUser({
         first_name: '',
         last_name: '',
         class: '5а',
-        student_id: ''
+        student_id: '',
       });
-      
+
       // Обновляем список
       loadUsers();
-      
     } catch (error) {
       console.error('Ошибка добавления:', error);
-      
+
       if (error.message.includes('UNIQUE')) {
         alert('❌ Ошибка: Ученик с таким ID уже существует!');
       } else if (error.message.includes('not found')) {
@@ -164,12 +197,11 @@ function Users() {
 
       // Удаляем запись из PocketBase
       await pb.collection('users').delete(id);
-      
+
       alert('✅ Ученик удален из PocketBase!');
-      
+
       // Обновляем список
       loadUsers();
-      
     } catch (error) {
       console.error('Ошибка удаления:', error);
       alert(`❌ Ошибка PocketBase: ${error.message}`);
@@ -177,20 +209,21 @@ function Users() {
   };
 
   // Фильтрация пользователей
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = search === '' || 
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      search === '' ||
       user.first_name?.toLowerCase().includes(search.toLowerCase()) ||
       user.last_name?.toLowerCase().includes(search.toLowerCase()) ||
       (user.student_id && user.student_id.toString().includes(search));
-    
+
     const matchesClass = selectedClass === 'all' || user.class === selectedClass;
-    
+
     return matchesSearch && matchesClass;
   });
 
   // Статистика по классам
   const classStats = {};
-  users.forEach(user => {
+  users.forEach((user) => {
     if (user.class) {
       classStats[user.class] = (classStats[user.class] || 0) + 1;
     }
@@ -225,9 +258,9 @@ function Users() {
           </p>
         </div>
         <div>
-          <a 
-            href="http://127.0.0.1:8090/_/" 
-            target="_blank" 
+          <a
+            href="http://127.0.0.1:8090/_/"
+            target="_blank"
             rel="noreferrer"
             className="btn btn-outline-primary btn-sm me-2"
             title="Открыть админку PocketBase"
@@ -251,14 +284,14 @@ function Users() {
             <div className="me-3">⚠️</div>
             <div>
               <strong>Проблема с подключением!</strong>
-              <div className="mt-1 small">{error.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
+              <div className="mt-1 small">
+                {error.split('\n').map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+              </div>
             </div>
           </div>
-          <button 
-            type="button" 
-            className="btn-close" 
-            onClick={() => setError('')}
-          ></button>
+          <button type="button" className="btn-close" onClick={() => setError('')}></button>
         </div>
       )}
 
@@ -273,7 +306,7 @@ function Users() {
               </p>
             </div>
             <div className="text-end">
-              <div className="small">ID учеников: {users.filter(u => u.student_id).length}</div>
+              <div className="small">ID учеников: {users.filter((u) => u.student_id).length}</div>
               <div className="small">Классов: {Object.keys(classStats).length}</div>
             </div>
           </div>
@@ -295,12 +328,12 @@ function Users() {
                   className="form-control"
                   placeholder="Иван"
                   value={newUser.first_name}
-                  onChange={(e) => setNewUser({...newUser, first_name: e.target.value})}
+                  onChange={(e) => setNewUser({ ...newUser, first_name: e.target.value })}
                   required
                   disabled={!isConnected}
                 />
               </div>
-              
+
               <div className="col-md-3">
                 <label className="form-label">Фамилия *</label>
                 <input
@@ -308,26 +341,28 @@ function Users() {
                   className="form-control"
                   placeholder="Петров"
                   value={newUser.last_name}
-                  onChange={(e) => setNewUser({...newUser, last_name: e.target.value})}
+                  onChange={(e) => setNewUser({ ...newUser, last_name: e.target.value })}
                   required
                   disabled={!isConnected}
                 />
               </div>
-              
+
               <div className="col-md-3">
                 <label className="form-label">Класс *</label>
                 <select
                   className="form-select"
                   value={newUser.class}
-                  onChange={(e) => setNewUser({...newUser, class: e.target.value})}
+                  onChange={(e) => setNewUser({ ...newUser, class: e.target.value })}
                   disabled={!isConnected}
                 >
-                  {classOptions.map(cls => (
-                    <option key={cls} value={cls}>{cls}</option>
+                  {classOptions.map((cls) => (
+                    <option key={cls} value={cls}>
+                      {cls}
+                    </option>
                   ))}
                 </select>
               </div>
-              
+
               <div className="col-md-3">
                 <label className="form-label">ID номер *</label>
                 <input
@@ -337,7 +372,7 @@ function Users() {
                   value={newUser.student_id}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, '');
-                    setNewUser({...newUser, student_id: value});
+                    setNewUser({ ...newUser, student_id: value });
                   }}
                   required
                   pattern="\d+"
@@ -346,15 +381,11 @@ function Users() {
                 />
               </div>
             </div>
-            
-            <button 
-              type="submit"
-              className="btn btn-success w-100 py-2"
-              disabled={!isConnected}
-            >
+
+            <button type="submit" className="btn btn-success w-100 py-2" disabled={!isConnected}>
               {isConnected ? '📝 Добавить в PocketBase' : '⏳ Ожидание подключения...'}
             </button>
-            
+
             {!isConnected && (
               <div className="alert alert-danger mt-3 mb-0">
                 <small>
@@ -384,8 +415,8 @@ function Users() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <button 
-                  className="btn btn-outline-secondary" 
+                <button
+                  className="btn btn-outline-secondary"
                   type="button"
                   onClick={() => setSearch('')}
                 >
@@ -393,7 +424,7 @@ function Users() {
                 </button>
               </div>
             </div>
-            
+
             <div className="col-md-4">
               <label className="form-label">Фильтр по классу:</label>
               <select
@@ -402,8 +433,10 @@ function Users() {
                 onChange={(e) => setSelectedClass(e.target.value)}
               >
                 <option value="all">Все классы</option>
-                {classOptions.map(cls => (
-                  <option key={cls} value={cls}>{cls} класс</option>
+                {classOptions.map((cls) => (
+                  <option key={cls} value={cls}>
+                    {cls} класс
+                  </option>
                 ))}
               </select>
             </div>
@@ -449,10 +482,9 @@ function Users() {
           <div>
             <h5 className="mb-0">📋 Список учеников из PocketBase</h5>
             <small className="text-muted">
-              {filteredUsers.length === users.length 
+              {filteredUsers.length === users.length
                 ? `Все ученики (${users.length})`
-                : `Показано: ${filteredUsers.length} из ${users.length}`
-              }
+                : `Показано: ${filteredUsers.length} из ${users.length}`}
             </small>
           </div>
           <div>
@@ -461,7 +493,7 @@ function Users() {
             </span>
           </div>
         </div>
-        
+
         <div className="card-body">
           {filteredUsers.length === 0 ? (
             <div className="text-center py-5">
@@ -470,18 +502,18 @@ function Users() {
               </div>
               <h5>Ничего не найдено</h5>
               <p className="text-muted">
-                {users.length === 0 
+                {users.length === 0
                   ? 'База данных пуста. Добавьте первого ученика!'
                   : 'Попробуйте изменить поисковый запрос или выберите другой класс'}
               </p>
               {users.length === 0 && (
-                <button 
+                <button
                   onClick={() => {
                     setNewUser({
                       first_name: 'Иван',
                       last_name: 'Петров',
                       class: '5а',
-                      student_id: '101'
+                      student_id: '101',
                     });
                   }}
                   className="btn btn-primary"
@@ -503,7 +535,7 @@ function Users() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map(user => (
+                  {filteredUsers.map((user) => (
                     <tr key={user.id}>
                       <td>
                         <code className="bg-light p-1 rounded border">
@@ -513,13 +545,17 @@ function Users() {
                       <td className="fw-bold">{user.last_name || '—'}</td>
                       <td>{user.first_name || '—'}</td>
                       <td>
-                        <span className={`badge ${user.class === '10' || user.class === '11' ? 'bg-danger' : 'bg-success'} p-2`}>
+                        <span
+                          className={`badge ${user.class === '10' || user.class === '11' ? 'bg-danger' : 'bg-success'} p-2`}
+                        >
                           {user.class || '—'}
                         </span>
                       </td>
                       <td>
                         <button
-                          onClick={() => deleteUser(user.id, `${user.first_name} ${user.last_name}`)}
+                          onClick={() =>
+                            deleteUser(user.id, `${user.first_name} ${user.last_name}`)
+                          }
                           className="btn btn-outline-danger btn-sm"
                           title="Удалить ученика"
                           disabled={!isConnected}
@@ -545,21 +581,31 @@ function Users() {
           <div>
             <h5 className="alert-heading">Инструкция по PocketBase</h5>
             <p className="mb-2">
-              Это приложение использует <strong>PocketBase</strong> как базу данных.
-              Все изменения сохраняются в коллекции <code>users</code>.
+              Это приложение использует <strong>PocketBase</strong> как базу данных. Все изменения
+              сохраняются в коллекции <code>users</code>.
             </p>
             <hr />
             <div className="row">
               <div className="col-md-6">
-                <p className="mb-1"><strong>Для запуска PocketBase:</strong></p>
+                <p className="mb-1">
+                  <strong>Для запуска PocketBase:</strong>
+                </p>
                 <ol className="mb-0 small">
-                  <li>Откройте терминал в папке <code>pocketbase</code></li>
-                  <li>Выполните: <code>.\pocketbase.exe serve</code></li>
-                  <li>Должно появиться: <code>Server started at http://127.0.0.1:8090</code></li>
+                  <li>
+                    Откройте терминал в папке <code>pocketbase</code>
+                  </li>
+                  <li>
+                    Выполните: <code>.\pocketbase.exe serve</code>
+                  </li>
+                  <li>
+                    Должно появиться: <code>Server started at http://127.0.0.1:8090</code>
+                  </li>
                 </ol>
               </div>
               <div className="col-md-6">
-                <p className="mb-1"><strong>Полезные ссылки:</strong></p>
+                <p className="mb-1">
+                  <strong>Полезные ссылки:</strong>
+                </p>
                 <ul className="mb-0 small">
                   <li>
                     <a href="http://127.0.0.1:8090/_/" target="_blank" rel="noreferrer">
@@ -567,7 +613,11 @@ function Users() {
                     </a>
                   </li>
                   <li>
-                    <a href="http://127.0.0.1:8090/api/collections/users/records" target="_blank" rel="noreferrer">
+                    <a
+                      href="http://127.0.0.1:8090/api/collections/users/records"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       🔗 API пользователей (JSON)
                     </a>
                   </li>

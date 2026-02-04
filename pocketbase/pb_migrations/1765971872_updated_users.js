@@ -1,28 +1,37 @@
 /// <reference path="../pb_data/types.d.ts" />
-migrate((app) => {
-  const collection = app.findCollectionByNameOrId("pbc_3754236674")
+migrate(
+  (app) => {
+    const collection = app.findCollectionByNameOrId('pbc_3754236674');
 
-  // update collection data
-  unmarshal({
-    "createRule": "",
-    "deleteRule": "",
-    "listRule": "",
-    "updateRule": "",
-    "viewRule": ""
-  }, collection)
+    // update collection data
+    unmarshal(
+      {
+        createRule: '',
+        deleteRule: '',
+        listRule: '',
+        updateRule: '',
+        viewRule: '',
+      },
+      collection
+    );
 
-  return app.save(collection)
-}, (app) => {
-  const collection = app.findCollectionByNameOrId("pbc_3754236674")
+    return app.save(collection);
+  },
+  (app) => {
+    const collection = app.findCollectionByNameOrId('pbc_3754236674');
 
-  // update collection data
-  unmarshal({
-    "createRule": "@request.auth.id != \"\"",
-    "deleteRule": "@request.auth.id != \"\"",
-    "listRule": "@request.auth.id != \"\"",
-    "updateRule": "@request.auth.id != \"\"",
-    "viewRule": "@request.auth.id != \"\""
-  }, collection)
+    // update collection data
+    unmarshal(
+      {
+        createRule: '@request.auth.id != ""',
+        deleteRule: '@request.auth.id != ""',
+        listRule: '@request.auth.id != ""',
+        updateRule: '@request.auth.id != ""',
+        viewRule: '@request.auth.id != ""',
+      },
+      collection
+    );
 
-  return app.save(collection)
-})
+    return app.save(collection);
+  }
+);
