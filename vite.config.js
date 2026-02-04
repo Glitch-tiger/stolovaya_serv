@@ -11,8 +11,13 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
-        '@utils': path.resolve(__dirname, 'src/utils'),
+        // в utils кладите всё вспомогательное. Когда с архитектурой разберётесь —
+        // достаньте это из ./db/
+        // Пока так. Подробнее в ./db/README.md
+        '@utils': path.resolve(__dirname, 'db/utils'),
         '@pages': path.resolve(__dirname, 'src/pages'),
+        // компоненты --> страницы --> маршруты в App.jsx
+        '@components': path.resolve(__dirname, 'src/components'),
       },
     },
   };

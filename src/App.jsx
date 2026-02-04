@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 
 // Импортируем компоненты страниц
+// TODO: дать адекватные имена страницам. Сами же путаетесь.
 import TestPage from './pages/TestPage';
 import TestPage2 from './pages/TestPage2';
 import TestPage3 from './pages/TestPage3';
