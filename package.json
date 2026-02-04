@@ -20,7 +20,7 @@
     "start": "vite",
     "build": "vite build",
     "prettier": "prettier --write .",
-    "serve": "vite preview",
+    "preview": "vite preview",
     "predeploy": "npm run prettier && npm run build",
     "deploy": "gh-pages -d build"
   },

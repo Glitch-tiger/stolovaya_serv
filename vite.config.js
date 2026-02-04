@@ -2,8 +2,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  // TODO: убрать эту возню в проде, gh-pages использовать при внедрении не будем. Но пока
+  // так. Подробнее тут: https://vite.dev/guide/static-deploy#github-pages
+  const isProd = mode === 'production';
+
   return {
+    base: isProd ? '/stolovaya_serv/' : '/',
+
     build: {
       outDir: 'build',
     },
