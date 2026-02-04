@@ -13,8 +13,8 @@ function TestPage3() {
       items: [
         { name: 'Суп картофельный с бобовыми', quantity: 1, price: 55 },
         { name: 'Салат из свежих помидор и огурцов', quantity: 1, price: 65 },
-        { name: 'Пирожное «Чоко пай»', quantity: 2, price: 25 }
-      ]
+        { name: 'Пирожное «Чоко пай»', quantity: 2, price: 25 },
+      ],
     },
     {
       id: 1002,
@@ -22,9 +22,7 @@ function TestPage3() {
       time: '13:15',
       total: 80,
       status: 'выполнен',
-      items: [
-        { name: 'Салат Цезарь', quantity: 1, price: 80 }
-      ]
+      items: [{ name: 'Салат Цезарь', quantity: 1, price: 80 }],
     },
     {
       id: 1003,
@@ -34,9 +32,9 @@ function TestPage3() {
       status: 'отменен',
       items: [
         { name: 'Суп картофельный с бобовыми', quantity: 2, price: 55 },
-        { name: 'Компот', quantity: 1, price: 10 }
-      ]
-    }
+        { name: 'Компот', quantity: 1, price: 10 },
+      ],
+    },
   ]);
 
   // Состояние для фильтров
@@ -44,7 +42,7 @@ function TestPage3() {
 
   // Функция для получения статуса заказа с цветом
   const getStatusBadge = (status) => {
-    switch(status) {
+    switch (status) {
       case 'выполнен':
         return <span className="badge bg-success">Выполнен</span>;
       case 'в обработке':
@@ -57,7 +55,7 @@ function TestPage3() {
   };
 
   // Фильтрация заказов
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = orders.filter((order) => {
     return statusFilter === 'все' || order.status === statusFilter;
   });
 
@@ -74,9 +72,9 @@ function TestPage3() {
   // Функция для отмены заказа (если в обработке)
   const cancelOrder = (orderId) => {
     if (window.confirm('Отменить этот заказ?')) {
-      setOrders(orders.map(order => 
-        order.id === orderId ? { ...order, status: 'отменен' } : order
-      ));
+      setOrders(
+        orders.map((order) => (order.id === orderId ? { ...order, status: 'отменен' } : order))
+      );
       alert('Заказ отменен');
     }
   };
@@ -127,7 +125,7 @@ function TestPage3() {
         <div className="card-header bg-light">
           <h5 className="mb-0">Список заказов</h5>
         </div>
-        
+
         <div className="card-body">
           {filteredOrders.length === 0 ? (
             <div className="text-center py-5">
@@ -136,9 +134,9 @@ function TestPage3() {
               </div>
               <h4>Заказы не найдены</h4>
               <p className="text-muted mb-4">Измените фильтр или оформите новый заказ</p>
-              <button 
+              <button
                 className="btn btn-primary"
-                onClick={() => window.location.href = '/test-page'}
+                onClick={() => (window.location.href = '/test-page')}
               >
                 Перейти в меню
               </button>
@@ -168,7 +166,7 @@ function TestPage3() {
                       </div>
                     </button>
                   </h2>
-                  
+
                   <div
                     id={`collapse${order.id}`}
                     className="accordion-collapse collapse"
@@ -200,13 +198,15 @@ function TestPage3() {
                             </tbody>
                             <tfoot>
                               <tr>
-                                <th colSpan="3" className="text-end">Итого:</th>
+                                <th colSpan="3" className="text-end">
+                                  Итого:
+                                </th>
                                 <th className="text-end text-success">{order.total} ₽</th>
                               </tr>
                             </tfoot>
                           </table>
                         </div>
-                        
+
                         <div className="col-md-4">
                           <h6>Действия:</h6>
                           <div className="d-grid gap-2">
@@ -216,7 +216,7 @@ function TestPage3() {
                             >
                               Повторить заказ
                             </button>
-                            
+
                             {order.status === 'в обработке' && (
                               <button
                                 className="btn btn-outline-danger"
@@ -242,22 +242,22 @@ function TestPage3() {
         <div className="col-md-6 mb-3">
           <div className="card">
             <div className="card-body text-center">
-              <button 
+              <button
                 className="btn btn-primary"
-                onClick={() => window.location.href = '/test-page'}
+                onClick={() => (window.location.href = '/test-page')}
               >
                 Сделать новый заказ
               </button>
             </div>
           </div>
         </div>
-        
+
         <div className="col-md-6 mb-3">
           <div className="card">
             <div className="card-body text-center">
-              <button 
+              <button
                 className="btn btn-success"
-                onClick={() => window.location.href = '/test-page2'}
+                onClick={() => (window.location.href = '/test-page2')}
               >
                 Перейти в корзину
               </button>

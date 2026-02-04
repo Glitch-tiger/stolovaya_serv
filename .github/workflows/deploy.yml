@@ -1,26 +1,43 @@
-name: Deploy Azure Function
-
+# https://vite.dev/guide/static-deploy#github-pages
+name: Развёртывание в gh-pages
 on:
   push:
-    branches: [ main ]
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        # Используйте Service Principal для аутентификации
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-    - name: Deploy to Azure Functions
-      uses: Azure/functions-action@v1
-      with:
-        app-name: 'your-function-app-name'
-        slot-name: 'production'
-        package: '.' # или путь к вашей папке с функцией
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: './build'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
