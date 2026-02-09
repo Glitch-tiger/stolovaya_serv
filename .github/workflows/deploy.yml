@@ -1,26 +1,61 @@
-name: Deploy Azure Function
+name: MAIN Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        # Используйте Service Principal для аутентификации
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-    - name: Deploy to Azure Functions
-      uses: Azure/functions-action@v1
-      with:
-        app-name: 'your-function-app-name'
-        slot-name: 'production'
-        package: '.' # или путь к вашей папке с функцией
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Используем удалённый PocketBase
+          VITE_POCKETBASE_URL: https://pb.dev.zavidovo.school
+          VITE_POCKETBASE_ADMIN_EMAIL: ${{ secrets.VITE_POCKETBASE_ADMIN_EMAIL }}
+          VITE_POCKETBASE_ADMIN_PASSWORD: ${{ secrets.VITE_POCKETBASE_ADMIN_PASSWORD }}
+          
+          # Дополнительные переменные если нужны
+          VITE_API_URL: https://pb.dev.zavidovo.school/api
+          VITE_DASHBOARD_URL: https://pb.dev.zavidovo.school/_
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
