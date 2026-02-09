@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import pb from '../pb';  // Импорт PocketBase из src/pb.js
+import pb from '../pocketbase';  // Импорт PocketBase из src/pb.js
 
 function Users() {
   // Состояния
