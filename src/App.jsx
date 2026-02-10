@@ -2,12 +2,12 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 
 // Импортируем компоненты страниц
-import TestPage from "./pages/TestPage";
-import TestPage2 from "./pages/TestPage2";
-import TestPage3 from "./pages/TestPage3";
-import LoginPage from "./pages/LoginPage";
-import UserProfile from "./pages/UserProfile";
-import Users from "./pages/Users";
+import MenuManagement from "./pages/MenuManagement";  // Управление меню и просмотр
+import TestPage2 from "./pages/TestPage2";           // Корзина
+import TestPage3 from "./pages/TestPage3";           // История заказов
+import LoginPage from "./pages/LoginPage";           // Вход
+import UserProfile from "./pages/UserProfile";       // Профиль
+import Users from "./pages/Users";                   // Управление учениками
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
         }}>
           🎓 Ученики
         </Link>
-        <Link to="/test-page" style={{ 
+        <Link to="/menu-management" style={{ 
           color: 'white', 
           textDecoration: 'none',
           padding: '8px 12px',
@@ -79,13 +79,13 @@ function App() {
       
       {/* Определение маршрутов */}
       <Routes>
-        <Route path="/" element={<TestPage />} /> {/* Главная страница - меню */}
-        <Route path="/users" element={<Users />} />
-        <Route path="/test-page" element={<TestPage />} />
-        <Route path="/test-page2" element={<TestPage2 />} />
-        <Route path="/test-page3" element={<TestPage3 />} />
-        <Route path="/login-page" element={<LoginPage />} />
-        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/" element={<MenuManagement />} />           {/* Главная страница - меню */}
+        <Route path="/users" element={<Users />} />               {/* Управление учениками */}
+        <Route path="/menu-management" element={<MenuManagement />} /> {/* Меню (дублирует главную) */}
+        <Route path="/test-page2" element={<TestPage2 />} />      {/* Корзина */}
+        <Route path="/test-page3" element={<TestPage3 />} />      {/* История заказов */}
+        <Route path="/login-page" element={<LoginPage />} />      {/* Вход */}
+        <Route path="/profile" element={<UserProfile />} />       {/* Профиль */}
       </Routes>
     </div>
   );

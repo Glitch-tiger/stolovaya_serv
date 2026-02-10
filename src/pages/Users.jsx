@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import pb from '../pocketbase';  // Импорт PocketBase из src/pb.js
 
 function Users() {
-  // Состояния
+  
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -27,7 +27,7 @@ function Users() {
   ];
 
   // Проверка подключения к PocketBase
-  const checkConnection = async () => {
+ const checkConnection = async () => {
     try {
       await pb.health.check();
       setIsConnected(true);
